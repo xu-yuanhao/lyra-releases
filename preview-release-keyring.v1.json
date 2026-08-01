@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "payload": {
+    "sequence": 1,
+    "generatedAt": "2026-08-01T00:00:00.000Z",
+    "expiresAt": "2027-08-01T00:00:00.000Z",
+    "keys": [
+      {
+        "keyId": "lyra-preview-2026-01",
+        "publicKey": "RTvlaobsIwgeXffIN0mb2q2C/v5fS6w/hx3wu7M9iuY=",
+        "publisher": "徐远豪 (Pete Hsu), publishing as Lyra",
+        "channels": [
+          "preview"
+        ],
+        "componentKinds": [
+          "core",
+          "runtime",
+          "app",
+          "resource",
+          "extension"
+        ],
+        "componentIdPrefixes": [
+          "lyra."
+        ],
+        "executionClasses": [
+          "first-party-shared-renderer",
+          "sandboxed-web",
+          "sandboxed-web-wasi"
+        ],
+        "validFrom": "2026-08-01T00:00:00.000Z",
+        "validUntil": "2027-08-01T00:00:00.000Z"
+      }
+    ],
+    "revokedKeyIds": []
+  },
+  "signature": {
+    "algorithm": "ed25519",
+    "keyId": "lyra-root-2026-01",
+    "value": "zK6UMjZNap5iZOSXV+AIzsK27soQbkeXxhqlPqaAZa48SW6YuZOuG9Se8bSPntaHlwihMpj50VU1FXA+5yaZBw=="
+  }
+}
