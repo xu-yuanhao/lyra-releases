@@ -50,7 +50,7 @@ jobs:
       - name: Normalize upstream local build settings
         working-directory: TeleMusic
         run: |
-          sed -i '/^org\.gradle\.java\.home=/d' gradle.properties
+          sed -i '/^org\.gradle\.java\./d' gradle.properties
 
       - name: Build release APK
         working-directory: TeleMusic
