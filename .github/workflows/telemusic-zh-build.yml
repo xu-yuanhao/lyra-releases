@@ -1,0 +1,66 @@
+name: Build TeleMusic zh-CN
+
+on:
+  push:
+    branches:
+      - tmp/telemusic-zh-build-20261017
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout build scripts
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install required Android packages
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "platforms;android-36" "build-tools;36.0.0" "ndk;26.1.10909125"
+
+      - name: Clone TeleMusic
+        run: git clone --depth 1 https://github.com/abn3li/TeleMusic.git TeleMusic
+
+      - name: Apply Simplified Chinese localization
+        run: python .ci/telemusic_zh.py TeleMusic
+
+      - name: Build release APK
+        working-directory: TeleMusic
+        env:
+          TELEMUSIC_BUILD_PYTHON: ${{ env.pythonLocation }}/bin/python
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon :app:assembleRelease
+
+      - name: Collect build outputs
+        run: |
+          mkdir -p out
+          cp TeleMusic/app/build/outputs/apk/release/app-release.apk out/TeleMusic-zh-CN.apk
+          cp TeleMusic/app/build/outputs/apk/release/app-release-corresponding-source.zip out/TeleMusic-zh-CN-corresponding-source.zip
+          cp TeleMusic/app/build/outputs/apk/release/licensing-verification.json out/licensing-verification.json
+          sha256sum out/TeleMusic-zh-CN.apk | tee out/SHA256SUMS.txt
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: TeleMusic-zh-CN
+          path: out/*
+          if-no-files-found: error
