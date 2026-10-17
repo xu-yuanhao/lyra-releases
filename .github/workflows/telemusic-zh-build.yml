@@ -42,7 +42,15 @@ jobs:
         run: git clone --depth 1 https://github.com/abn3li/TeleMusic.git TeleMusic
 
       - name: Apply Simplified Chinese localization
-        run: python .ci/telemusic_zh.py TeleMusic
+        run: |
+          python -m py_compile .ci/telemusic_zh.py .ci/telemusic_zh_extra.py
+          python .ci/telemusic_zh.py TeleMusic
+          python .ci/telemusic_zh_extra.py TeleMusic
+
+      - name: Normalize upstream local build settings
+        working-directory: TeleMusic
+        run: |
+          sed -i '/^org\.gradle\.java\.home=/d' gradle.properties
 
       - name: Build release APK
         working-directory: TeleMusic
